@@ -2,6 +2,7 @@
 title: "ECON 21320: Final Paper"
 author: "Eric Milstein and Tak Hogan"
 date: "March 21, 2019"
+bibliography: references.bib
 output: pdf_document
 ---
 
