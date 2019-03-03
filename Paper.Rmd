@@ -1,0 +1,22 @@
+---
+title: "ECON 21320: Final Paper"
+author: "Eric Milstein and Tak Hogan"
+date: "March 21, 2019"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Abstract
+
+# Introduction
+
+# Literature Review
+
+# Methods
+
+# Data and Analysis
+
+# References
