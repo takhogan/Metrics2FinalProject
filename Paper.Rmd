@@ -12,6 +12,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Abstract
 [@aliprantisBlowingItKnocking2015]
+
 # Introduction
 
 # Literature Review
