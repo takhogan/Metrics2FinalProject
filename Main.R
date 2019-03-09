@@ -5,6 +5,8 @@ print('')
 
 tax.data <- read.csv("../Assessor_Historical_Secured_Property_Tax_Rolls.csv")
 
+affordable.data <- read.csv("../Residential_Projects_With_Inclusionary_Requirements.csv")
+
 affordable <- read.csv("../Residential_Projects_With_Inclusionary_Requirements.csv")
 
 # Add census tract variable for affordable housing dataset
@@ -30,4 +32,3 @@ affordable$simple415[affordable$simple415 %in%
 # On-site BMR project variable was messy and had space at end
 affordable$simple415[affordable$simple415 %in% c("On-site BMR Project ", "On-site BMR Project/Fee Payment", "On-site BMR Project/Land Dedication")] <- "On-site BMR Project"
 affordable$simple415 <- as.factor(affordable$simple415)
-
