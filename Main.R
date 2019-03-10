@@ -32,3 +32,20 @@ affordable$simple415[affordable$simple415 %in%
 # On-site BMR project variable was messy and had space at end
 affordable$simple415[affordable$simple415 %in% c("On-site BMR Project ", "On-site BMR Project/Fee Payment", "On-site BMR Project/Land Dedication")] <- "On-site BMR Project"
 affordable$simple415 <- as.factor(affordable$simple415)
+
+# Create latitude and longitude coordinates in the tax data
+tax.data$latitude <- substr(tax.data$the_geom, 2, 9)
+tax.data$longitude <- substr(tax.data$the_geom, regexpr(', ', tax.data$the_geom)+2,  regexpr(', ', tax.data$the_geom)+10)
+tax.data$LocationKey <- paste("(", tax.data$latitude, ", ", tax.data$longitude, ")", sep="")
+
+# Create latitude and longitude coordinates in the affordable data
+affordable$latitude2 <- substr(affordable$Location, 2, 9)
+affordable$longitude2 <- substr(affordable$Location, regexpr(', ', affordable$Location)+2,  regexpr(', ', affordable$Location)+10)
+affordable$LocationKey <- paste("(", affordable$latitude2, ", ", affordable$longitude2, ")", sep="")
+
+# Merge datasets
+total <- merge(tax.data,affordable,by="LocationKey")
+
+# Terrible preliminary model
+model1 <- lm(Assessed.Land.Value ~ Project.Units + completion_year, data=total)
+
