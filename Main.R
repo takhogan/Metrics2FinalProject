@@ -1,4 +1,5 @@
 library(tigris)
+library(pastecs)
 
 print('')
 print('')
@@ -60,7 +61,6 @@ total.clean <- total2[c("LocationKey", "Parcel.Number", "Property.Location", "Cl
                        "X3bd.Units", "X4bd.Units","X30..AMI", "X50..AMI","X55..AMI", "X60..AMI","X80..AMI", "X90..AMI",
                        "X100..AMI", "X120..AMI","X150..AMI")]
 
-
 # Terrible preliminary model
 model1 <- lm(Assessed.Land.Value ~ Project.Units + completion_year, data=total)
-
+stat.desc(total.clean)
