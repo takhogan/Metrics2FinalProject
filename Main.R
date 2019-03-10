@@ -63,4 +63,3 @@ total.clean <- total2[c("LocationKey", "Parcel.Number", "Property.Location", "Cl
 
 # Terrible preliminary model
 model1 <- lm(Assessed.Land.Value ~ Project.Units + completion_year, data=total)
-
