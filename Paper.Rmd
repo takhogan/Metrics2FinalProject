@@ -21,11 +21,38 @@ library(knitr)
 
 # Introduction
 
+In the past decade, several American cities have instituted inclusionary housing policies to combat rising rents and inequality. These policies require a given share of new residential units constructed in a city to be made affordable to low or moderate-income residents. State and local governments implement such standards through various means, including mandatory requirements, voluntary and incentive-based programs, direct subsidies to developers, and geographically determined zoning laws.
+
+Inclusionary programs are broadly popular among policymakers, urban planners, and advocates of affordable housing. These groups view such programs as a way to maintain neighborhood economic diversity and prevent cities from pricing out low-income residents. However, inclusionary policies are generally unpopular among real estate developers and have encountered opposition from economists. Critics argue that inclusionary regulations artificially restrict the supply of market-rate units in a city, drive up rents, and reduce the incentive for developers to build new housing. According to this line of thought, aside from a few lucky low-income families that obtain affordable units, the majority of a city's residents are made worse off by such policies.
+
+San Francisco’s housing market is widely viewed as being in a state of crisis, with rents and property values rising to record levels in recent years. Commentators have suggested several contributing factors, including the influx of population associated with the city's rapid economic growth, strict zoning laws that limit high-density development, resistance from neighborhood groups, high costs of construction, and difficulties in obtaining permits and environmental approval for new developments.
+
+In 2002, the City of San Francisco established the Inclusionary Housing Program, which has since become one of nation’s largest and longest-running affordable housing programs. Guided by Section 415 of the city's planning code, the program requires housing developers that propose a new residential project with 10 or more units to either reserve a percentage of units to be rented or sold below-market rate, fulfill this requirement at a different building they own, or pay an in-lieu fee. Developers are also offered the opportunity to pursue some combination of these requirements.
+
+Few empirical studies have been conducted into the effects of inclusionary housing policies. While there have been several policy reports and feasibility/cost-benefit analyses, there is little academic literature. Some of the potential barriers to research include the small scope of these programs, the recency of their implementation, a lack of available data, and legal complexities in evaluating the effects of these policies. However, there is related literature on other “place-based” policies (enterprise zones, neighborhood revitalization projects, etc.), spatial econometrics and spillover effects, rent control, and other affordable housing programs.
+
+
 # Literature Review
 
 # Methods
 
+We propose to evaluate San Francisco’s Inclusionary Housing Program by leveraging the fact that the policy allows developers to pay an in-lieu fee instead of building affordable housing units. This creates a naturally-occurring treatment group (the developments that chose to build affordable housing) and control group (the developments that chose to pay the in-lieu fee). Considering all eligible housing developments in the city to be our unit of analysis, we plan to use a difference-in-differences approach to compare changes in home values in areas surrounding developments that built affordable housing vs. developments that were eligible but instead paid the fee/built off-site. In doing so, we can estimate the effect of the introduction of affordable units on neighborhood property values.
+
+The obvious concern that arises with this approach is that developers select into the treatment and control groups based on unobservable factors that are difficult to estimate. For example, if developers believe that the neighborhood will experience rising housing prices in the future, they might choose to pay the in-lieu fee so that they can earn the full profits from selling/renting market-rate units in the future. In contrast, a developer that thinks the market will be relatively stagnant might choose to build affordable units and take the steady stream of profits instead of spending a large amount of money on the in-lieu fee. Therefore, the parallel trends assumption may not be valid since underlying neighborhood characteristics can influence developers’ decisions to build units vs. pay the fee.
+
+In our paper, we will first have to show that developers’ decisions are essentially random and not based on any other observable characteristics of the neighborhood, using a large number of underlying neighborhood/property characteristics from municipal datasets and census tract data from American Community Survey. We actually believe this is a valid assumption, since the in-lieu fee is calculated in a way that already incorporates information about the area and makes the developer’s decision less dependent on unobservables. However, we have several other concerns with our design, including difficulties in selecting appropriate controls, addressing temporal and spatial autocorrelation, and extending the model to a continuous treatment (since it is not just that developers are building affordable housing or not: it’s that they’re building a particular number of units). In addition, we are doubtful that the program is large enough to have a meaningful effect in either direction.
+
+Due to the difficulties in estimating this model, we have considered several related research questions. Another potential study that we discussed is to evaluate whether developers are acting rationally in choosing to pay the in-lieu fee. If we were to pursue this question, we might construct some estimate of a developer’s “expected payoff” by observing trends in housing prices/values in surrounding areas. We might then regress the expected payoff on a “paid in-lieu fee” dummy to determine if they made the right decision in choosing whether or not to pay the fee.
+Data
+
+
 # Data and Analysis
+
+From the City of San Francisco’s open data portal, we have data on all inclusionary-eligible housing developments with geotags, dates of permit issuance and completion, and information about number and type of units. To evaluate home values in surrounding neighborhoods, we found a multi-year panel dataset
+of property tax assessments in San Francisco with detailed parcel-level land and home values for every property in the city. We also plan to introduce various census tract-level control variables by linking this data with demographic, economic, and housing data from the American Community Survey.
+
+Finally, we hope to obtain more detailed geocoded information on rental prices or transactions from listing agencies (e.g. Zillow, Redfin, Trulia). Although our current method is to estimate the effect of affordable developments on nearby property values, we would prefer to use sale prices/rents as our outcome variable. Since the home value metric is calculated by the city according to a designated formula, it is not necessarily the best way to evaluate the impact of affordable housing on the surrounding neighborhood.
+
 
 ```{r}
 # 
