@@ -63,7 +63,4 @@ total.clean <- total2[c("LocationKey", "Parcel.Number", "Property.Location", "Cl
 
 # Terrible preliminary model
 model1 <- lm(Assessed.Land.Value ~ Project.Units + completion_year, data=total)
-<<<<<<< HEAD
-=======
 stat.desc(total.clean)
->>>>>>> dce00875069b549e2c933f5a2b2adbeb50681e15
