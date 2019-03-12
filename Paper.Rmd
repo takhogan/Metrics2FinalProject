@@ -8,6 +8,12 @@ output: pdf_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+library(tigris)
+library(gplots)
+library(foreign)
+library(car)
+library(qwraps2)
+library(knitr)
 ```
 
 # Abstract
@@ -20,5 +26,32 @@ knitr::opts_chunk$set(echo = TRUE)
 # Methods
 
 # Data and Analysis
+
+```{r}
+# 
+# # Summary statistics table
+# 
+# our_summary1 <-
+#   list("Assessed Land Value" =
+#          list("min" = ~ min(total.clean$Assessed.Land.Value),
+#               "median" = ~ median(total.clean$Assessed.Land.Value),
+#               "max" = ~ max(total.clean$Assessed.Land.Value),
+#               "mean (sd)" = ~ qwraps2::mean_sd(total.clean$Assessed.Land.Value)),
+#        "Assessed Improvement Value" =
+#          list("min" = ~ min(total.clean$Assessed.Improvement.Value),
+#               "median" = ~ median(total.clean$Assessed.Improvement.Value),
+#               "max" = ~ max(total.clean$Assessed.Improvement.Value),
+#               "mean (sd)" = ~ qwraps2::mean_sd(total.clean$Assessed.Improvement.Value))
+#               "Forward Gears" =
+#        list("Three" = ~ qwraps2::n_perc0(total.clean$gear == 3),
+#             "Four"  = ~ qwraps2::n_perc0(total.clean$gear == 4),
+#             "Five"  = ~ qwraps2::n_perc0(total.clean$gear == 5))
+#        )
+# 
+# ### Overall
+# by_415 <- summary_table(total.clean, our_summary1)
+# kable(by_415)
+
+```
 
 # References

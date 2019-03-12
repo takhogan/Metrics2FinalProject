@@ -2,6 +2,8 @@ library(tigris)
 library(gplots)
 library(foreign)
 library(car)
+library(qwraps2)
+library(knitr)
 
 print('')
 print('')
@@ -64,17 +66,44 @@ total.clean <- total2[c("LocationKey", "Parcel.Number", "Property.Location", "Cl
                        "X3bd.Units", "X4bd.Units","X30..AMI", "X50..AMI","X55..AMI", "X60..AMI","X80..AMI", "X90..AMI",
                        "X100..AMI", "X120..AMI","X150..AMI")]
 
+# Recode messed up property names
+total.clean$Property.Location <- as.character(total.clean$Property.Location)
+total.clean[as.character(total.clean$"Property.Location") == "0000 0055 SITUS TO BE ASSIGNEDST0000",]$"Property.Location" <- "0000 0055 PAGE                ST0210"
+total.clean[as.character(total.clean$"Property.Location") == "0000 0000 V                     0000",]$"Property.Location" <- "0000 0119 SEVENTH                ST0000"
+total.clean[as.character(total.clean$"Property.Location") == "0000 0000 SITUS TO BE ASSIGNEDST0000",]$"Property.Location" <- "0000 1400 MISSION                ST1000"
+total.clean[as.character(total.clean$"Property.Location") == "0000 0000 SITUS TO BE ASSIGNED  0000",]$"Property.Location" <- "0000 2121 THIRD                ST1000"
+
+# Filter out pre-2005 data
+
+# Filter out non-complete properties
+
+# write.csv(total.clean, "total_clean.csv")
+
 # Generate counts of missing data
 sapply(total.clean,function(x) sum(is.na(x)))
 
-# Terrible preliminary model
+# Property values graph
+plotmeans(Assessed.Improvement.Value ~ Closed.Roll.Year, main="Rising Property Values in San Francisco, 2007-Present",
+          xlab = "Year", ylab="Assessed Land Value", data=tax.data)
 
-plotmeans(Assessed.Improvement.Value ~ Closed.Roll.Year, main="Heterogeneity across years", data=tax.data)
+# Trends in affordable units broken down by different characteristics
+
+# Map of average home value by location, changes in home values by location
+
+# Map of affordable developments
 
 scatterplot(Assessed.Improvement.Value~Closed.Roll.Year|simple415, boxplots=TRUE, smooth=FALSE, reg.line=FALSE, data=total.clean)
 
+by(total.clean$Closed.Roll.Year, total.clean$simple415, summary)
+
+# Terrible preliminary model
 model1 <- lm(log(Assessed.Improvement.Value+1) ~ Project.Units + Closed.Roll.Year, data=total.clean)
-plot(model1)
+summary(model1)
+
+# Diff in diff model
+
+
+# Aggregate level model
 
 # Verify parallel trends assumption
 
