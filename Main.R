@@ -1,5 +1,7 @@
 library(tigris)
-library(pastecs)
+library(gplots)
+library(foreign)
+library(car)
 
 print('')
 print('')
@@ -49,18 +51,32 @@ total <- merge(tax.data,affordable,by="LocationKey")
 
 total2 <- total[order(total$Parcel.Number, total$Closed.Roll.Year),]
 
-total.clean <- total2[c("LocationKey", "Parcel.Number", "Property.Location", "Closed.Roll.Year", "Assessed.Land.Value", "simple415",
-                       "completion_year", "Use.Code", "Use.Definition", "Property.Class.Code", "Property.Class.Code.Definition",
-                       "Year.Property.Built", "Property.Area", "Assessed.Improvement.Value", "Assessor.Neighborhood.District",
+total.clean <- total2[c("LocationKey", "Parcel.Number", "Property.Location", "Closed.Roll.Year", "Assessed.Land.Value", "Assessed.Improvement.Value", 
+                        "simple415", "completion_year", "Use.Code", "Use.Definition", "Property.Class.Code", "Property.Class.Code.Definition",
+                       "Year.Property.Built", "Property.Area", "Assessor.Neighborhood.District",
                        "Assessor.Neighborhood.Code", "Assessor.Neighborhood", "Supervisor.District.x", "Analysis.Neighborhood",
                        "Zip.Code", "census_code", "census_tract", "Project.ID", "Project.Status", "Housing.Tenure",
-                       "Planning.Case.Number", "Number.of.Bathrooms", "Number.of.Bedrooms", "Number.of.Rooms", "Number.of.Stories",
-                       "Number.of.Units", "Project.Units", "Affordable.Units", "Section.415.Declaration",  "Actual.Estimated.Completion.Date",
+                       "Planning.Case.Number", "Section.415.Declaration",  "Actual.Estimated.Completion.Date", 
+                       "Number.of.Bathrooms", "Number.of.Bedrooms", "Number.of.Rooms", "Number.of.Stories",
+                       "Number.of.Units", "Project.Units", "Affordable.Units",
                        "Units.Subject.to.Section.415", "On.Site.Affordable.Units", "Off.Site.Affordable.Units", 
                        "Off.Site.Affordable.Units.at.This.Site", "SRO.Units", "Studio.Units","X1bd.Units", "X2bd.Units",
                        "X3bd.Units", "X4bd.Units","X30..AMI", "X50..AMI","X55..AMI", "X60..AMI","X80..AMI", "X90..AMI",
                        "X100..AMI", "X120..AMI","X150..AMI")]
 
+# Generate counts of missing data
+sapply(total.clean,function(x) sum(is.na(x)))
+
 # Terrible preliminary model
-model1 <- lm(Assessed.Land.Value ~ Project.Units + completion_year, data=total)
-stat.desc(total.clean)
+
+plotmeans(Assessed.Improvement.Value ~ Closed.Roll.Year, main="Heterogeneity across years", data=tax.data)
+
+scatterplot(Assessed.Improvement.Value~Closed.Roll.Year|simple415, boxplots=TRUE, smooth=FALSE, reg.line=FALSE, data=total.clean)
+
+model1 <- lm(log(Assessed.Improvement.Value+1) ~ Project.Units + Closed.Roll.Year, data=total.clean)
+plot(model1)
+
+# Verify parallel trends assumption
+
+# Verify other diff-in-diff assumptions
+
