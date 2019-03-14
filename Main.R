@@ -140,7 +140,7 @@ write.csv(tax.data.2016, "tax_data_2016.csv")
 ### AGGREGATE DISTANCE METRIC INTO SUMMARY STATISTICS
 
 # Create and populate "within x meters" variables
-med_vals <- paste0("med_nearby_val_", c(100, 200, 300), "m_", c(2007:2017))
+med_vals <- paste0("med_nearby_val_", rep(c(100, 200, 300),11), "m_", c(2007:2017))
 total.clean.unique[med_vals] <- NA
 
 # Helper function: takes in a name and extracts the #meters
@@ -150,33 +150,29 @@ extract_meters <- function(var_name) {
 
 # Helper function: takes in a name and extracts the year
 extract_year <- function(var_name) {
-  as.numeric(substr(var_name, 20, nchar(var_name)))
+  as.numeric(substr(var_name, 21, nchar(var_name)))
 }
 
 # Helper function: takes in a row and the column number of interest
 # Outputs the calculated distance we want for the particular year
 get_medians <- function(x, var_name, row_num) {
   
-
-  extract_year(var_name)
-  
-  tax.data.2016$
+  year <- extract_year(var_name)
+  desired.df <- paste0("tax.data.", year)
+  distance <- extract_meters(var_name)
+  location <- x[1]
+  desired.col <- new_cols[row_num]
     
-  # Figure out which column we want
-  "dsitance_"+row_num
-  
-  extract_meters(var_name)
-  #meters determines distance we care about
-  
-  #year determines dataset we look at
+  vector <- subset(tax.data.2016, (is.na(desired.col) == FALSE) & (desired.col < distance), select=LocationKey)
+  d <- get(desired.df)
   
 }
 
 # Main function for populating : iterates through the distance columns and calls the helper function
-j <- 1
+z <- 1
 for (i in med_vals) {
-  total.clean.unique[i] <- apply(total.clean.unique, 1, get_medians, var_name = i, row_num = j)
-  j <- j + 1
+  total.clean.unique[i] <- apply(total.clean.unique, 1, get_medians, var_name = i, row_num = z)
+  z <- z + 1
 }
 
 ### CLEAN FOR ZILLOW INPUT
