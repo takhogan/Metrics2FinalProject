@@ -10,8 +10,6 @@ library(dplyr)
 print('')
 print('')
 
-text
-
 tax.data <- read.csv("../Assessor_Historical_Secured_Property_Tax_Rolls.csv")
 
 affordable <- read.csv("../Residential_Projects_With_Inclusionary_Requirements.csv")
@@ -130,7 +128,7 @@ find_distances <- function (x,col) {
 }
 
 # Main function: iterates through the columns and calls the helper function
-for (i in new_cols[1:166]) {
+for (i in new_cols) {
   tax.data.2016[i] <- apply(tax.data.2016, 1, find_distances, col=i)
 }
 
@@ -139,9 +137,27 @@ write.csv(tax.data.2016, "tax_data_2016.csv")
 
 ### AGGREGATE DISTANCE METRIC INTO SUMMARY STATISTICS
 
+# Create new variable for asssesed+improved
+tax.data.2007$Total.Assessed.Value <- tax.data.2007$Assessed.Land.Value + tax.data.2007$Assessed.Improvement.Value
+tax.data.2008$Total.Assessed.Value <- tax.data.2008$Assessed.Land.Value + tax.data.2008$Assessed.Improvement.Value
+tax.data.2009$Total.Assessed.Value <- tax.data.2009$Assessed.Land.Value + tax.data.2009$Assessed.Improvement.Value
+tax.data.2010$Total.Assessed.Value <- tax.data.2010$Assessed.Land.Value + tax.data.2010$Assessed.Improvement.Value
+tax.data.2011$Total.Assessed.Value <- tax.data.2011$Assessed.Land.Value + tax.data.2011$Assessed.Improvement.Value
+tax.data.2012$Total.Assessed.Value <- tax.data.2012$Assessed.Land.Value + tax.data.2012$Assessed.Improvement.Value
+tax.data.2013$Total.Assessed.Value <- tax.data.2013$Assessed.Land.Value + tax.data.2013$Assessed.Improvement.Value
+tax.data.2014$Total.Assessed.Value <- tax.data.2014$Assessed.Land.Value + tax.data.2014$Assessed.Improvement.Value
+tax.data.2015$Total.Assessed.Value <- tax.data.2015$Assessed.Land.Value + tax.data.2015$Assessed.Improvement.Value
+tax.data.2016$Total.Assessed.Value <- tax.data.2016$Assessed.Land.Value + tax.data.2016$Assessed.Improvement.Value
+tax.data.2017$Total.Assessed.Value <- tax.data.2017$Assessed.Land.Value + tax.data.2017$Assessed.Improvement.Value
+
 # Create and populate "within x meters" variables
 med_vals <- paste0("med_nearby_val_", rep(c(100, 200, 300),11), "m_", c(2007:2017))
 total.clean.unique[med_vals] <- NA
+
+# Create an index variable
+for (i in 1:nrow(total.clean.unique)) {
+  total.clean.unique$index[i] <- i 
+}
 
 # Helper function: takes in a name and extracts the #meters
 extract_meters <- function(var_name) {
@@ -155,24 +171,36 @@ extract_year <- function(var_name) {
 
 # Helper function: takes in a row and the column number of interest
 # Outputs the calculated distance we want for the particular year
-get_medians <- function(x, var_name, row_num) {
-  
+get_medians <- function(x, var_name) {
+  row_num <- as.numeric(x[90])
   year <- extract_year(var_name)
   desired.df <- paste0("tax.data.", year)
   distance <- extract_meters(var_name)
   location <- x[1]
   desired.col <- new_cols[row_num]
-    
-  vector <- subset(tax.data.2016, (is.na(desired.col) == FALSE) & (desired.col < distance), select=LocationKey)
-  d <- get(desired.df)
   
+  #print(desired.col)
+  
+  # #desired.col <- eval(parse(desired.col))
+  # 
+  # #print(desired.col)
+  # 
+  # #print(distance)
+  # 
+  # #vector <- subset(tax.data.2016, !is.na(desired.col) & (desired.col < distance), select=LocationKey)
+  # vector <- tax.data.2016[ which( tax.data.2016$desired.col < distance & 
+  #                                   !is.na(tax.data.2016$desired.col)),]
+  # print(vector)
+  # 
+  # d <- get(desired.df)
+  # var_name <- median(merge(d[, c("LocationKey", "Total.Assessed.Value")], vector, by="LocationKey")$Total.Assessed.Value)
+  # #print(var_name)
+  #return(var_name)
 }
 
 # Main function for populating : iterates through the distance columns and calls the helper function
-z <- 1
-for (i in med_vals) {
-  total.clean.unique[i] <- apply(total.clean.unique, 1, get_medians, var_name = i, row_num = z)
-  z <- z + 1
+for (i in med_vals[1]) {
+  total.clean.unique[i] <- apply(total.clean.unique, 1, get_medians, var_name = i)
 }
 
 ### CLEAN FOR ZILLOW INPUT
