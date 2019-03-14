@@ -123,15 +123,15 @@ distance_num <- function(x){
 # Helper function: takes in a row and the column number of interest (i.e. "distance_1" = 1)
 # Outputs the distance from the lat/long coords in that row to the affordable housing entry we want
 find_distances <- function (x,col) {
-  if(total.clean.unique$Assessor.Neighborhood.Code[46+as.numeric(distance_num(i))] == x[38])
-    distHaversine(c(as.numeric(x[45]), as.numeric(x[44])), c(total.clean.unique$Longitude[46+as.numeric(distance_num(i))],
-                                                             total.clean.unique$Latitude[46+as.numeric(distance_num(i))]))
+  if(total.clean.unique$Assessor.Neighborhood.Code[as.numeric(distance_num(i))] == x[38])
+    distHaversine(c(as.numeric(x[45]), as.numeric(x[44])), c(total.clean.unique$Longitude[as.numeric(distance_num(i))],
+                                                             total.clean.unique$Latitude[as.numeric(distance_num(i))]))
   else NA
 }
 
 # Main function: iterates through the columns and calls the helper function
-for (i in new_cols[107:211]) {
-  tax.data.2007[i] <- apply(tax.data.2007, 1, find_distances, col=i)
+for (i in new_cols[167:211]) {
+  tax.data.2016[i] <- apply(tax.data.2016, 1, find_distances, col=i)
 }
 
 ### CLEAN FOR ZILLOW INPUT
@@ -173,6 +173,8 @@ model1 <- lm(log(Assessed.Improvement.Value+1) ~ Project.Units + Closed.Roll.Yea
 summary(model1)
 
 # Diff in diff model
+
+
 
 # Create dummy for "time when treatment started"
 
