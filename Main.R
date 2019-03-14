@@ -72,27 +72,12 @@ total.clean[as.character(total.clean$"Property.Location") == "0000 0055 SITUS TO
 total.clean[as.character(total.clean$"Property.Location") == "0000 0000 V                     0000",]$"Property.Location" <- "0000 0119 SEVENTH                ST0000"
 total.clean[as.character(total.clean$"Property.Location") == "0000 0000 SITUS TO BE ASSIGNEDST0000",]$"Property.Location" <- "0000 1400 MISSION                ST1000"
 total.clean[as.character(total.clean$"Property.Location") == "0000 0000 SITUS TO BE ASSIGNED  0000",]$"Property.Location" <- "0000 2121 THIRD                ST1000"
-total.clean[as.character(total.clean$"Property.Location") == "0000 2559 SITUS TO BE ASSIGNEDAV0000",]$"Property.Location" <- "0000 1501 FILBERT                ST0000"
-total.clean[as.character(total.clean$"Property.Location") == "0000 2395VSITUS TO BE ASSIGNEDST0000",]$"Property.Location" <- "0000 2395 LOMBARD                ST0000"
-total.clean[as.character(total.clean$"Property.Location") == "0000 1461 SITUS TO BE ASSIGNEDST0000",]$"Property.Location" <- "0000 1461 PINE                ST0000"
-total.clean[as.character(total.clean$"Parcel.Number") == "0785029",]$"Property.Location" <- "0000 0388 FULTON                ST0202"
-total.clean[as.character(total.clean$"Parcel.Number") == "0808036",]$"Property.Location" <- "0401 0401 GROVE                0000"
-total.clean[as.character(total.clean$"Parcel.Number") == "0808039",]$"Property.Location" <- "0450 0450 HAYES                ST0000"
-total.clean[as.character(total.clean$"Parcel.Number") == "0831023",]$"Property.Location" <- "0000 0325 OCTAVIA                ST BNBAFBP3D"
-total.clean[as.character(total.clean$"Parcel.Number") == "0857004",]$"Property.Location" <- "0000 0100 BUCHANAN ST                0000"
-total.clean[as.character(total.clean$"Parcel.Number") == "3747320",]$"Property.Location" <- "0000 0399 FREMONT                ST2602"
 
-# Can't figure out what's going on here
-total.clean <- subset(total.clean, Parcel.Number!="0816067")
-
-
-# Filter out pre-2009 data
-post.2009 <- total.clean[total.clean$completion_year > 2009,]
+# Filter out pre-2005 data
 
 # Filter out non-complete properties
-final.clean <- post.2009[post.2009$Project.Status=="(6) Complete",]
 
-write.csv(final.clean, "final_clean.csv")
+# write.csv(total.clean, "total_clean.csv")
 
 # Generate counts of missing data
 sapply(total.clean,function(x) sum(is.na(x)))
