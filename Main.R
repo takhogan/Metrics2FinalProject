@@ -6,6 +6,7 @@ library(qwraps2)
 library(knitr)
 library(geosphere)
 library(dplyr)
+library(stargazer)
 
 print('')
 print('')
@@ -178,18 +179,13 @@ get_medians <- function(x, var_name) {
   distance <- extract_meters(var_name)
   location <- x[1]
   desired.col <- new_cols[row_num]
-  
-  #print(desired.col)
-  
-  # #desired.col <- eval(parse(desired.col))
-  # 
-  # #print(desired.col)
+  index_desired_col <- 46 + distance_num(desired.col)
   # 
   # #print(distance)
   # 
-  # #vector <- subset(tax.data.2016, !is.na(desired.col) & (desired.col < distance), select=LocationKey)
-  # vector <- tax.data.2016[ which( tax.data.2016$desired.col < distance & 
-  #                                   !is.na(tax.data.2016$desired.col)),]
+  #vector <- subset(tax.data.2016, !is.na(desired.col) & (desired.col < distance), select=LocationKey)
+  vector <- tax.data.2016[ which( tax.data.2016[index_desired_col] < distance & 
+                                     !is.na(tax.data.2016[index_desired_col])),]
   # print(vector)
   # 
   # d <- get(desired.df)

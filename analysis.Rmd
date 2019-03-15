@@ -1,0 +1,50 @@
+---
+title: "analysis"
+author: "Eric Milstein"
+date: "3/14/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(ggplot2)
+library(plotrix)
+```
+
+Regression output
+
+```{r}
+
+# m1 <- lm(`time_vals.(1)`$t_m_1_100 ~ `time_vals.(1)`$completionyear + `time_vals.(1)`$section415dec, data = `time_vals.(1)`)
+# 
+# m2 <- lm(~ , data = analysis.data)
+# m3 <- lm(~ , data = analysis.data)
+# 
+# stargazer(m1, m2, m3, type="html",
+#           dep.var.labels=c("Median","Fast car (=1)"),
+#           covariate.labels=c("Gross horsepower","Rear axle ratio","Four foward gears", "Five
+#                              forward gears","Type of transmission (manual=1)"),
+#           out="models.htm")
+
+```
+
+Diff-in-diff graph
+
+```{r}
+
+#p <- ggplot(data.frame(x=c(-5, 5), y=c(-30,30)), aes(x,y)) + labs(x = "Years Before/After Affordable Housing Construction") + labs(y #= "Log(Median Property Values Within 300 Meters)") + labs(title = "Difference-in-Differences Plot for ") + #geom_vline(xintercept=0)
+
+plot(x=NA, type="n", ylim=c(-5, 5), xlim=c(-5, 5),
+     xlab="Years Before/After Affordable Housing Construction", ylab="Log(Median Property Values Within 300m)")
+# Group 1
+ablineclip(a=1, b=0.2, x1= -5, x2=0, col="blue")
+ablineclip(a=1, b=0.4, x1= 0, x2=5, col="blue")
+
+# Group 2
+ablineclip(a=-2, b=0.15,x1 = -5, x2=0, col="red")
+abline(v = 0)
+
+ablineclip(a=-2, b=0.2, x1= 0, x2=5, col="red")
+
+
+```
