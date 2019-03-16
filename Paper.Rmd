@@ -17,6 +17,9 @@ library(knitr)
 ```
 
 # Abstract
+
+This paper evaluates San Francisco's Affordable Housing Program by estimating the impact of affordable developments on the assessed and predicted home values of nearby properties. We use a unique dataset constructed from detailed parcel-level tax assessment data, American Community Survey microdata, and price estimates scraped from real estate listing service Zillow. Using a difference-in-differences model, we estimate that properties with 
+
 [@aliprantisBlowingItKnocking2015]
 
 # Introduction
@@ -29,10 +32,12 @@ San Francisco’s housing market is widely viewed as being in a state of crisis,
 
 In 2002, the City of San Francisco established the Inclusionary Housing Program, which has since become one of nation’s largest and longest-running affordable housing programs. Guided by Section 415 of the city's planning code, the program requires housing developers that propose a new residential project with 10 or more units to either reserve a percentage of units to be rented or sold below-market rate, fulfill this requirement at a different building they own, or pay an in-lieu fee. Developers are also offered the opportunity to pursue some combination of these requirements.
 
-Few empirical studies have been conducted into the effects of inclusionary housing policies. While there have been several policy reports and feasibility/cost-benefit analyses, there is little academic literature. Some of the potential barriers to research include the small scope of these programs, the recency of their implementation, a lack of available data, and legal complexities in evaluating the effects of these policies. However, there is related literature on other “place-based” policies (enterprise zones, neighborhood revitalization projects, etc.), spatial econometrics and spillover effects, rent control, and other affordable housing programs.
 
 
 # Literature Review
+
+Few empirical studies have been conducted into the effects of inclusionary housing policies. While there have been several policy reports and feasibility/cost-benefit analyses, there is little academic literature. Some of the potential barriers to research include the small scope of these programs, the recency of their implementation, a lack of available data, and legal complexities in evaluating the effects of these policies. However, there is related literature on other “place-based” policies (enterprise zones, neighborhood revitalization projects, etc.), spatial econometrics and spillover effects, rent control, and other affordable housing programs.
+
 
 # Methods
 
