@@ -17,6 +17,8 @@ header-includes:
 - \usepackage{setspace}
 - \usepackage{chngcntr}
 - \onehalfspacing
+- \usepackage{float}
+- \floatplacement{figure}{H}
 
 
 abstract: "This paper evaluates San Francisco's Inclusionary Housing Program by estimating the impact of affordable developments on assessed and predicted property values in the surrounding area. We use a unique panel dataset constructed from parcel-level tax assessments, American Community Survey microdata, and price estimates scraped from real estate listing service Zillow. Exploiting the city's mandate that all new developments either designate affordable units or pay an in-lieu fee, we use a difference-in-differences design to compare changes in surrounding property values between these two groups. We find that on average, property values _____ by _____ in areas that compared to those that ."
@@ -24,7 +26,7 @@ abstract: "This paper evaluates San Francisco's Inclusionary Housing Program by 
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(fig.pos = 'H')
 library(tigris)
 library(gplots)
 library(foreign)
@@ -109,7 +111,11 @@ of property tax assessments in San Francisco with detailed parcel-level land and
 
 Finally, we hope to obtain more detailed geocoded information on rental prices or transactions from listing agencies (e.g. Zillow, Redfin, Trulia). Although our current method is to estimate the effect of affordable developments on nearby property values, we would prefer to use sale prices/rents as our outcome variable. Since the home value metric is calculated by the city according to a designated formula, it is not necessarily the best way to evaluate the impact of affordable housing on the surrounding neighborhood.
 
-###
+![Relative Size of 100m, 200m, 300m Distance Bands on City Map](fig_satellite1.png){width=75%}
+
+
+![Relative Size of 100m, 200m, 300m Distance Bands around Property](fig_satellite2.png){width=75%}
+
 
 
 # Analysis
