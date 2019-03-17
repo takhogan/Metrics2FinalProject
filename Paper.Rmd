@@ -1,9 +1,26 @@
 ---
-title: "ECON 21320: Final Paper"
-author: "Eric Milstein and Tak Hogan"
+title: |
+  | \LARGE{The Effect of Affordable Housing on Neighboring Property Values: }
+  | \LARGE{Evidence from San Francisco's Inclusionary Housing Program \vspace{0.5cm}}
+author: |
+  | Eric Milstein and Tak Hogan
+  | Applications of Econometric and Data Science Methods
 date: "March 21, 2019"
 bibliography: references.bib
 output: pdf_document
+fontsize: 11pt
+fig_caption: yes
+indent: true
+geometry: margin=1in
+header-includes:
+- \usepackage{placeins}
+- \usepackage{setspace}
+- \usepackage{chngcntr}
+- \onehalfspacing
+
+
+abstract: "This paper evaluates San Francisco's Inclusionary Housing Program by estimating the impact of affordable developments on assessed and predicted property values in the surrounding area. We use a unique panel dataset constructed from parcel-level tax assessments, American Community Survey microdata, and price estimates scraped from real estate listing service Zillow. Exploiting the city's mandate that all new developments either designate affordable units or pay an in-lieu fee, we use a difference-in-differences design to compare changes in surrounding property values between these two groups. We find that on average, property values _____ by _____ in areas that compared to those that ."
+
 ---
 
 ```{r setup, include=FALSE}
@@ -16,12 +33,6 @@ library(qwraps2)
 library(knitr)
 ```
 
-# Abstract
-
-This paper evaluates San Francisco's Affordable Housing Program by estimating the impact of affordable developments on the assessed and predicted home values of nearby properties. We use a unique dataset constructed from detailed parcel-level tax assessment data, American Community Survey microdata, and price estimates scraped from real estate listing service Zillow. Using a difference-in-differences model, we estimate that properties with 
-
-[@aliprantisBlowingItKnocking2015]
-
 # Introduction
 
 In the past decade, several American cities have instituted inclusionary housing policies to combat rising rents and inequality. These policies require a given share of new residential units constructed in a city to be made affordable to low or moderate-income residents. State and local governments implement such standards through various means, including mandatory requirements, voluntary and incentive-based programs, direct subsidies to developers, and geographically determined zoning laws.
@@ -32,58 +43,76 @@ San Francisco’s housing market is widely viewed as being in a state of crisis,
 
 In 2002, the City of San Francisco established the Inclusionary Housing Program, which has since become one of nation’s largest and longest-running affordable housing programs. Guided by Section 415 of the city's planning code, the program requires housing developers that propose a new residential project with 10 or more units to either reserve a percentage of units to be rented or sold below-market rate, fulfill this requirement at a different building they own, or pay an in-lieu fee. Developers are also offered the opportunity to pursue some combination of these requirements.
 
+### San Francisco's Inclusionary Housing Program
 
 
 # Literature Review
 
 Few empirical studies have been conducted into the effects of inclusionary housing policies. While there have been several policy reports and feasibility/cost-benefit analyses, there is little academic literature. Some of the potential barriers to research include the small scope of these programs, the recency of their implementation, a lack of available data, and legal complexities in evaluating the effects of these policies. However, there is related literature on other “place-based” policies (enterprise zones, neighborhood revitalization projects, etc.), spatial econometrics and spillover effects, rent control, and other affordable housing programs.
+[@aliprantisBlowingItKnocking2015]
 
 
-# Methods
+# Research Design
 
 We propose to evaluate San Francisco’s Inclusionary Housing Program by leveraging the fact that the policy allows developers to pay an in-lieu fee instead of building affordable housing units. This creates a naturally-occurring treatment group (the developments that chose to build affordable housing) and control group (the developments that chose to pay the in-lieu fee). Considering all eligible housing developments in the city to be our unit of analysis, we plan to use a difference-in-differences approach to compare changes in home values in areas surrounding developments that built affordable housing vs. developments that were eligible but instead paid the fee/built off-site. In doing so, we can estimate the effect of the introduction of affordable units on neighborhood property values.
 
 The obvious concern that arises with this approach is that developers select into the treatment and control groups based on unobservable factors that are difficult to estimate. For example, if developers believe that the neighborhood will experience rising housing prices in the future, they might choose to pay the in-lieu fee so that they can earn the full profits from selling/renting market-rate units in the future. In contrast, a developer that thinks the market will be relatively stagnant might choose to build affordable units and take the steady stream of profits instead of spending a large amount of money on the in-lieu fee. Therefore, the parallel trends assumption may not be valid since underlying neighborhood characteristics can influence developers’ decisions to build units vs. pay the fee.
 
+### Model
+
+$$\text{Y}_{it}=\alpha+\beta S_{i}+\gamma T_{t}+\delta(S_{i}\times T_{t})+\rho\mathbf{X}_{it}+\epsilon_{it}$$
+
+$$
+\begin{cases}
+Y_{it} & \text{Median Property Values in Surrounding Area }\\
+ & \text{at Time }t\\
+S_{i} & \text{Section 415 Declaration Dummy (Affordable vs. Pay Fee)}\\
+T_{t} & \text{Pre vs. Post Construction Dummy}\\
+\mathbf{X}_{it} & \text{Vector of Covariates}
+\end{cases}
+$$
+
+The difference-in-differences estimate:
+
+$$\hat{\delta}_{DD}=\bar{Y}_{\text{post}}^{\text{affordable}}-\bar{Y}_{\text{pre}}^{\text{affordable}}-(\bar{Y}_{\text{post}}^{\text{pay fee}}-\bar{Y}_{\text{pre}}^{\text{pay fee}})$$
+
+Interpreting coefficients 
+
+$$\text{Y}_{it}=\alpha+\beta S_{i}+\gamma T_{t}+\delta(S_{i}\times T_{t})+\rho\mathbf{X}_{it}+\epsilon_{it}$$
+
+$$\begin{cases}
+\alpha & \text{Average pre-construction median surrounding property value }\\
+ & \text{for non-affordable properties}\\
+\beta & \text{Affordable housing-specific effect on surrounding property values }\\
+\gamma & \text{Time trend common to both affordable and non-affordable properties }\\
+\delta & \text{Diff-in-diff estimator: true effect of treatment}
+\end{cases}$$
+
+
+
+Assumption underlying diff-in-diff estimation: in the absence of affordable housing, property i's outcome at time t is given by:
+
+$$E[Y_{i}|S_{i}=0,t=\tau]=\gamma_{i}+\lambda_{\tau}$$
+
+Two implicit identifying assumptions:
+
+• Selection bias relates to fixed characteristics of properties ($\gamma_{i}$)
+
+• Time trend ($\lambda_{\tau}$) same for affordable and non-affordable properties
+
 In our paper, we will first have to show that developers’ decisions are essentially random and not based on any other observable characteristics of the neighborhood, using a large number of underlying neighborhood/property characteristics from municipal datasets and census tract data from American Community Survey. We actually believe this is a valid assumption, since the in-lieu fee is calculated in a way that already incorporates information about the area and makes the developer’s decision less dependent on unobservables. However, we have several other concerns with our design, including difficulties in selecting appropriate controls, addressing temporal and spatial autocorrelation, and extending the model to a continuous treatment (since it is not just that developers are building affordable housing or not: it’s that they’re building a particular number of units). In addition, we are doubtful that the program is large enough to have a meaningful effect in either direction.
 
-Due to the difficulties in estimating this model, we have considered several related research questions. Another potential study that we discussed is to evaluate whether developers are acting rationally in choosing to pay the in-lieu fee. If we were to pursue this question, we might construct some estimate of a developer’s “expected payoff” by observing trends in housing prices/values in surrounding areas. We might then regress the expected payoff on a “paid in-lieu fee” dummy to determine if they made the right decision in choosing whether or not to pay the fee.
-Data
-
-
-# Data and Analysis
+# Data Description
 
 From the City of San Francisco’s open data portal, we have data on all inclusionary-eligible housing developments with geotags, dates of permit issuance and completion, and information about number and type of units. To evaluate home values in surrounding neighborhoods, we found a multi-year panel dataset
 of property tax assessments in San Francisco with detailed parcel-level land and home values for every property in the city. We also plan to introduce various census tract-level control variables by linking this data with demographic, economic, and housing data from the American Community Survey.
 
 Finally, we hope to obtain more detailed geocoded information on rental prices or transactions from listing agencies (e.g. Zillow, Redfin, Trulia). Although our current method is to estimate the effect of affordable developments on nearby property values, we would prefer to use sale prices/rents as our outcome variable. Since the home value metric is calculated by the city according to a designated formula, it is not necessarily the best way to evaluate the impact of affordable housing on the surrounding neighborhood.
 
+###
 
-```{r}
-# 
-# # Summary statistics table
-# 
-# our_summary1 <-
-#   list("Assessed Land Value" =
-#          list("min" = ~ min(total.clean$Assessed.Land.Value),
-#               "median" = ~ median(total.clean$Assessed.Land.Value),
-#               "max" = ~ max(total.clean$Assessed.Land.Value),
-#               "mean (sd)" = ~ qwraps2::mean_sd(total.clean$Assessed.Land.Value)),
-#        "Assessed Improvement Value" =
-#          list("min" = ~ min(total.clean$Assessed.Improvement.Value),
-#               "median" = ~ median(total.clean$Assessed.Improvement.Value),
-#               "max" = ~ max(total.clean$Assessed.Improvement.Value),
-#               "mean (sd)" = ~ qwraps2::mean_sd(total.clean$Assessed.Improvement.Value))
-#               "Forward Gears" =
-#        list("Three" = ~ qwraps2::n_perc0(total.clean$gear == 3),
-#             "Four"  = ~ qwraps2::n_perc0(total.clean$gear == 4),
-#             "Five"  = ~ qwraps2::n_perc0(total.clean$gear == 5))
-#        )
-# 
-# ### Overall
-# by_415 <- summary_table(total.clean, our_summary1)
-# kable(by_415)
 
-```
+# Analysis
+
 
 # References
