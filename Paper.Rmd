@@ -33,6 +33,10 @@ library(foreign)
 library(car)
 library(qwraps2)
 library(knitr)
+library(ggplot2)
+library(plotrix)
+library(stargazer)
+library(doBy)
 ```
 
 # Introduction
@@ -116,9 +120,71 @@ Finally, we hope to obtain more detailed geocoded information on rental prices o
 
 ![Relative Size of 100m, 200m, 300m Distance Bands around Property](fig_satellite2.png){width=75%}
 
-
-
 # Analysis
 
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+
+# Read in mean and median data, merge files
+total_clean_mean_drop_zeros <- read.csv("../total_clean_mean_drop_zeros.csv")
+total_clean_median_drop_zeros <- read.csv("../total_clean_median_drop_zeros.csv")
+total_clean_median_drop_zeros$dist_100_mean <- total_clean_mean_drop_zeros$dist_100_mean
+total_clean_median_drop_zeros$dist_200_mean <- total_clean_mean_drop_zeros$dist_200_mean
+total_clean_median_drop_zeros$dist_300_mean <- total_clean_mean_drop_zeros$dist_300_mean
+
+final.data <- total_clean_median_drop_zeros
+
+# Fill in missing row
+final.data[final.data$X==45646,]$dist_100_mean <- total_clean_mean_drop_zeros[total_clean_mean_drop_zeros$X==45646,]$merged_2014_100_mean
+final.data[final.data$X==45646,]$dist_200_mean <- total_clean_mean_drop_zeros[total_clean_mean_drop_zeros$X==45646,]$merged_2014_200_mean
+final.data[final.data$X==45646,]$dist_300_mean <- total_clean_mean_drop_zeros[total_clean_mean_drop_zeros$X==45646,]$merged_2014_300_mean
+final.data[final.data$X==45646,]$dist_100_median <- final.data[final.data$X==45646,]$merged_2014_100_median
+final.data[final.data$X==45646,]$dist_200_median <- final.data[final.data$X==45646,]$merged_2014_200_median
+final.data[final.data$X==45646,]$dist_300_median <- final.data[final.data$X==45646,]$merged_2014_300_median
+
+# Encode time and treatment dummies
+final.data$time <- ifelse(final.data$year_index >= 1, 1, 0)
+final.data$treated <- ifelse(final.data$simple415 == "On-site BMR Project", 1, 0)
+final.data$did = final.data$time * final.data$treated
+
+no.outliers <- final.data[final.data$LocationKey != "(37.79054, -122.3959)",]
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE, results='asis'}
+
+m1 <- lm(log(dist_100_median) ~ treated + time + did, data = final.data)
+m2 <- lm(log(dist_200_median) ~ treated + time + did, data = final.data)
+m3 <- lm(log(dist_300_median) ~ treated + time + did, data = final.data)
+
+m4 <- lm(log(dist_100_mean) ~ treated + time + did, data = final.data)
+m5 <- lm(log(dist_200_mean) ~ treated + time + did, data = final.data)
+m6 <- lm(log(dist_300_mean) ~ treated + time + did, data = final.data)
+ 
+stargazer(m1, m2, m3, type='latex', 
+          dep.var.labels=c("Log(100m Median)","Log(200m Median)", "Log(300m Median)"),
+          covariate.labels=c("On-Site Affordable Housing", "Post-Treatment", "Diff-in-Diff Estimator", "Constant"),
+          font.size="small", header=FALSE)
+
+stargazer(m4, m5, m6, type='latex', 
+          dep.var.labels=c("Log(100m Mean)","Log(200m Mean)", "Log(300m Mean)"),
+          covariate.labels=c("On-Site Affordable Housing", "Post-Treatment", "Diff-in-Diff Estimator", "Constant"),
+          font.size="small", header=FALSE)
+
+```
+
+```{r}
+
+# Visualize diff in diff model
+
+year_means <- summaryBy(dist_300_median ~ treated + year_index, data=final.data, FUN=c(length,median,sd))
+ggplot(data=year_means, aes(x=year_index,y=dist_300_median.median)) + geom_point() + 
+    geom_line(data = year_means[year_means$treated==1,], aes(x = year_index, y = dist_300_median.median), color = "blue") +
+  geom_line(data = year_means[year_means$treated==0,], aes(x = year_index, y = dist_300_median.median), color = "red") + xlim(-2,2) + geom_vline(xintercept=0)
+
+
+
+```
+
+
+- Run separate regressions: subset data to only t-1, t+1, etc.
 
 # References
